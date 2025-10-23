@@ -1,69 +1,95 @@
-<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Abstract neon glass logo">
   <defs>
-    <!-- Gradients for 3D effect -->
-    <linearGradient id="cubeGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+    <!-- Editable theme colors -->
+    <style>
+      :root {
+        --bg1: #0f1224;      /* dark outer */
+        --bg2: #1b2147;      /* inner halo */
+        --g1: #00f5ff;       /* cyan */
+        --g2: #8a2be2;       /* electric purple */
+        --g3: #ff6bd6;       /* pink accent */
+        --glass: rgba(255,255,255,0.14);
+        --stroke: rgba(255,255,255,0.35);
+      }
+    </style>
+
+    <!-- Radial background glow -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="var(--bg2)"></stop>
+      <stop offset="100%" stop-color="var(--bg1)"></stop>
+    </radialGradient>
+
+    <!-- Main neon gradient -->
+    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--g1)"></stop>
+      <stop offset="55%" stop-color="var(--g2)"></stop>
+      <stop offset="100%" stop-color="var(--g3)"></stop>
     </linearGradient>
-    
-    <linearGradient id="cubeGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#C026D3;stop-opacity:1" />
-    </linearGradient>
-    
-    <linearGradient id="cubeGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
-    </linearGradient>
-    
-    <!-- Shadow filter -->
-    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+
+    <!-- Soft inner shadow for glass card -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset dx="0" dy="2"></feOffset>
+      <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
     </filter>
-    
-    <!-- Glow effect -->
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
+
+    <!-- Outer neon glow -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
       </feMerge>
     </filter>
+
+    <!-- Small sparkle glow -->
+    <filter id="spark" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.6"></feGaussianBlur>
+    </filter>
   </defs>
-  
-  <!-- Background circle with gradient -->
-  <circle cx="200" cy="200" r="190" fill="url(#cubeGradient1)" opacity="0.1" filter="url(#glow)"/>
-  
-  <g transform="translate(10, 20)">
-    <!-- 3D Cube representation -->
-    <!-- Front face -->
-    <path d="M 120 160 L 200 160 L 200 240 L 120 240 Z" 
-          fill="url(#cubeGradient1)" 
-          filter="url(#shadow)"/>
-    
-    <!-- Right face -->
-    <path d="M 200 160 L 260 120 L 260 200 L 200 240 Z" 
-          fill="url(#cubeGradient2)" 
-          filter="url(#shadow)"/>
-    
-    <!-- Top face -->
-    <path d="M 120 160 L 180 120 L 260 120 L 200 160 Z" 
-          fill="url(#cubeGradient3)" 
-          filter="url(#shadow)"/>
-    
-    <!-- Wireframe overlay for tech feel -->
-    <g stroke="#ffffff" stroke-width="2" fill="none" opacity="0.3">
-      <!-- Front face wireframe -->
-      <rect x="120" y="160" width="80" height="80"/>
-      <!-- Connection lines for 3D effect -->
-      <line x1="120" y1="160" x2="180" y2="120"/>
-      <line x1="200" y1="160" x2="260" y2="120"/>
-      <line x1="200" y1="240" x2="260" y2="200"/>
-    </g>
-    
-    <!-- Tech accent - small geometric elements -->
-    <circle cx="160" cy="200" r="3" fill="#ffffff" opacity="0.6"/>
-    <circle cx="230" cy="150" r="2" fill="#ffffff" opacity="0.4"/>
-    <rect x="140" y="210" width="4" height="4" fill="#ffffff" opacity="0.5" rx="1"/>
+
+  <!-- Background circle -->
+  <rect width="256" height="256" fill="url(#bgGrad)"></rect>
+
+  <!-- Subtle vignette -->
+  <ellipse cx="128" cy="130" rx="108" ry="104" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="16" opacity="0.25"></ellipse>
+
+  <!-- Glass card base -->
+  <g transform="translate(32,42)">
+    <rect x="0" y="0" rx="18" ry="18" width="192" height="172" fill="var(--glass)" stroke="var(--stroke)" stroke-width="1.25" style="backdrop-filter: blur(18px);" filter="url(#innerShadow)"></rect>
+    <!-- Highlight stroke -->
+    <rect x="0.75" y="0.75" rx="17" ry="17" width="190.5" height="170.5" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"></rect>
   </g>
+
+  <!-- Abstract swirl mark -->
+  <g transform="translate(128,120) rotate(-12)">
+    <!-- Neon ribbon -->
+    <path d="
+      M -60 -6
+      C -28 -40, 22 -42, 52 -10
+      C 68 8, 66 30, 42 40
+      C 10 54, -44 36, -58 10
+      C -64 0, -64 -2, -60 -6 Z" fill="url(#neon)" filter="url(#neonGlow)" opacity="0.98"></path>
+    <!-- Inner glass cut -->
+    <path d="
+      M -28 -10
+      C -8 -26, 18 -26, 34 -8
+      C 42 2, 40 12, 30 18
+      C 8 30, -18 20, -26 6
+      C -30 0, -30 -6, -28 -10 Z" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.25)" stroke-width="0.6"></path>
+  </g>
+
+  <!-- Accent line -->
+  <path d="M48 86 C 90 58, 166 58, 208 86" stroke="url(#neon)" stroke-width="2.2" opacity="0.55" fill="none"></path>
+
+  <!-- Sparkles -->
+  <g fill="#fff">
+    <circle cx="92" cy="156" r="2.2" filter="url(#spark)" opacity="0.9"></circle>
+    <circle cx="176" cy="144" r="1.6" filter="url(#spark)" opacity="0.85"></circle>
+    <circle cx="148" cy="176" r="1.8" filter="url(#spark)" opacity="0.85"></circle>
+    <circle cx="114" cy="138" r="1.2" filter="url(#spark)" opacity="0.8"></circle>
+  </g>
+
+  <!-- Subtle bottom glow -->
+  <ellipse cx="128" cy="200" rx="76" ry="10" fill="url(#neon)" opacity="0.25" filter="url(#neonGlow)"></ellipse>
 </svg>
