@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Essential OG Tags -->
+    <meta
+      property="og:title"
+      content="Free 3D Model Viewer | GLB GLTF Viewer Online - 3D Model Hub"
+    />
+    <meta
+      property="og:description"
+      content="Free online 3D model viewer for GLB and GLTF files. Advanced WebGL rendering with PBR materials, custom lighting, and post-processing effects. View 3D models instantly in your browser."
+    />
+    <meta property="og:image" content="/assets/og-image.png" />
+    <meta
+      property="og:image:alt"
+      content="3D Model Hub interface showing a 3D model with advanced lighting controls"
+    />
+    <meta
+      property="og:url"
+      content="https://ShreyaPandayy.github.io/3d-model-hub/"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="3D Model Hub" />
+
+    <!-- Additional OG Tags -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Free 3D Model Viewer | GLB GLTF Viewer Online"
+    />
+    <meta
+      name="twitter:description"
+      content="Upload and view 3D models online with advanced WebGL rendering, PBR materials, and custom lighting. Works in any browser - no download required."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="3D Model Hub - Free online GLB GLTF viewer"
+    />
+
+    <!-- Core SEO Tags -->
+    <meta
+      name="description"
+      content="Free online 3D model viewer for GLB and GLTF files. Advanced WebGL rendering with PBR materials, custom lighting, post-processing effects. No download required - view 3D models instantly in your browser."
+    />
+    <meta
+      name="keywords"
+      content="3D model viewer, GLB viewer, GLTF viewer, online 3D viewer, free 3D viewer, WebGL viewer, PBR rendering, 3D model browser, three.js viewer, 3D visualization"
+    />
+    <meta name="author" content="3D Model Hub" />
+    <meta name="robots" content="index, follow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ShreyaPandayy.github.io/3d-model-hub/" />
+
+    <title>3D Model Hub</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <img src="assets/3d_model_hub_logo.svg" alt="3D Model Hub Logo" id="logo" />
+    <button
+      id="hamburger-menu"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="controls"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div id="mobile-menu-overlay"></div>
+    <div class="loader-container">
+      <div id="container">
+        <!-- Landing Page / Initial Upload UI -->
+        <div id="loading">
+          <!-- This is the main landing page container now -->
+          <div class="landing-background-overlay"></div>
+          <div class="landing-content">
+            <div class="landing-left">
+              <h1 class="landing-title">3D Model Hub</h1>
+              <p class="landing-tagline">
+                Free Online GLB & GLTF Viewer with Advanced WebGL Rendering
+              </p>
+
+              <div class="feature-tags">
+                <span class="feature-tag">PBR Rendering</span>
+                <span class="feature-tag">Custom Lighting</span>
+                <span class="feature-tag">Post-Processing</span>
+                <span class="feature-tag">HDRI Support</span>
+                <span class="feature-tag">No Download</span>
+              </div>
+
+              <button class="cta-button" id="cta-button">
+                View 3D Models Now →
+              </button>
+            </div>
+
+            <div class="landing-right">
+              <div class="upload-zone" id="upload-zone">
+                <div class="rotating-cube">
+                  <div class="cube-face front"></div>
+                  <div class="cube-face back"></div>
+                  <div class="cube-face right"></div>
+                  <div class="cube-face left"></div>
+                  <div class="cube-face top"></div>
+                  <div class="cube-face bottom"></div>
+                </div>
+                <h3 class="upload-zone-title">Drag & Drop Your Model</h3>
+                <p class="upload-zone-subtitle">
+                  Supports GLB • GLTF • Instant Preview
+                </p>
+                <p id="upload-message">
+                  Drag & Drop or Click to Upload (GLB/GLTF)
+                </p>
+                <input type="file" id="modelUpload" accept=".glb,.gltf" />
+                <!-- Spinner is inside the upload zone, hidden initially -->
+                <div class="loader hidden"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div id="canvas-container"></div>
+
+        <!-- Control Panel - Initially hidden via CSS opacity -->
+        <div id="controls">
+          <h3><i class="fas fa-cube"></i> 3D Model Previewer</h3>
+
+          <!-- Accordion Container -->
+          <div class="accordion-container">
+            <!-- View Controls Section -->
+            <div class="accordion-section">
+              <button class="accordion-header">
+                View Controls
+                <span class="accordion-icon"><i class="fas fa-plus"></i></span>
+              </button>
+              <div class="accordion-content">
+                <div class="control-group">
+                  <label>Camera Distance</label>
+                  <input
+                    type="range"
+                    id="cameraDistance"
+                    min="3"
+                    max="30"
+                    value="11"
+                    step="0.5"
+                  />
+                </div>
+                <div class="control-group">
+                  <label>Auto Rotate</label>
+                  <button id="toggleRotation">Start Auto Rotation</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lighting Section -->
+            <div class="accordion-section">
+              <button class="accordion-header">
+                Lighting
+                <span class="accordion-icon"><i class="fas fa-plus"></i></span>
+              </button>
+              <div class="accordion-content">
+                <div class="control-group">
+                  <label>Ambient Light Intensity</label>
+                  <input
+                    type="range"
+                    id="ambientLight"
+                    min="0"
+                    max="3"
+                    value="0.7"
+                    step="0.1"
+                  />
+                </div>
+                <div class="control-group">
+                  <label>Ambient Light Color</label>
+                  <input type="color" id="ambientLightColor" value="#FFFFF0" />
+                </div>
+                <div class="control-group">
+                  <label>Key Light Intensity</label>
+                  <input
+                    type="range"
+                    id="keyLightIntensity"
+                    min="0"
+                    max="30"
+                    value="6.0"
+                    step="0.5"
+                  />
+                </div>
+                <div class="control-group">
+                  <label>Key Light Color</label>
+                  <input type="color" id="keyLightColor" value="#FFF5E1" />
+                </div>
+                <div class="control-group">
+                  <h4>Hemisphere Light</h4>
+                  <label>Sky Color</label>
+                  <input type="color" id="hemisphereSkyColor" value="#FFFAF0" />
+                  <label>Ground Color</label>
+                  <input
+                    type="color"
+                    id="hemisphereGroundColor"
+                    value="#B0C4DE"
+                  />
+                  <label>Intensity</label>
+                  <input
+                    type="range"
+                    id="hemisphereIntensity"
+                    min="0"
+                    max="5"
+                    value="0.9"
+                    step="0.1"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Shadow Configuration Section -->
+            <div class="accordion-section">
+              <button class="accordion-header">
+                Shadows (Key Light)
+                <span class="accordion-icon"><i class="fas fa-plus"></i></span>
+              </button>
+              <div class="accordion-content">
+                <div class="control-group">
+                  <label for="shadowMapSize">Shadow Map Size</label>
+                  <select id="shadowMapSize" name="shadowMapSize">
+                    <option value="512">512x512</option>
+                    <option value="1024">1024x1024</option>
+                    <option value="2048">2048x2048</option>
+                    <option value="4096" selected>4096x4096</option>
+                  </select>
+                  <label for="shadowBias" style="margin-top: 10px"
+                    >Shadow Bias</label
+                  >
+                  <input
+                    type="number"
+                    id="shadowBias"
+                    name="shadowBias"
+                    value="-0.001"
+                    step="0.0001"
+                  />
+                  <label for="shadowRadius" style="margin-top: 10px"
+                    >Shadow Radius (Softness)</label
+                  >
+                  <input
+                    type="range"
+                    id="shadowRadius"
+                    name="shadowRadius"
+                    min="0"
+                    max="16"
+                    value="1.0"
+                    step="0.1"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Environment Controls Section -->
+            <div class="accordion-section">
+              <button class="accordion-header">
+                Environment
+                <span class="accordion-icon"><i class="fas fa-plus"></i></span>
+              </button>
+              <div class="accordion-content">
+                <div class="control-group">
+                  <label>Floor Color</label>
+                  <input type="color" id="floorColor" value="#E1DBDB" />
+                </div>
+                <div class="control-group">
+                  <label>Scene Background Color</label>
+                  <input
+                    type="color"
+                    id="sceneBackgroundColor"
+                    value="#FFFFFF"
+                  />
+                </div>
+                <div class="control-group">
+                  <h4>Environment Map (HDRI)</h4>
+                  <label for="hdriUpload" class="button-like-label"
+                    >Upload .HDR File</label
+                  >
+                  <input
+                    type="file"
+                    id="hdriUpload"
+                    accept=".hdr"
+                    style="display: none"
+                  />
+                  <p
+                    id="currentHdriName"
+                    style="
+                      font-size: 0.8em;
+                      color: var(--color-text-secondary);
+                      margin-top: 5px;
+                    "
+                  >
+                    Default studio
+                  </p>
+                  <button id="clearHdriButton" style="margin-top: 8px">
+                    Clear HDRI & Use Default
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Post-Processing Section -->
+            <div class="accordion-section">
+              <button class="accordion-header">
+                Post-Processing
+                <span class="accordion-icon"><i class="fas fa-plus"></i></span>
+              </button>
+              <div class="accordion-content">
+                <div class="control-group">
+                  <!-- This inner control-group might be redundant if the whole section is one group -->
+                  <h5 style="margin-bottom: 5px">Bloom</h5>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      id="bloomToggle"
+                      name="bloomToggle"
+                    />
+                    <label
+                      for="bloomToggle"
+                      style="margin-left: 8px; margin-bottom: 0"
+                      >Enable Bloom</label
+                    >
+                  </div>
+                  <label for="bloomThreshold">Bloom Threshold</label>
+                  <input
+                    type="range"
+                    id="bloomThreshold"
+                    name="bloomThreshold"
+                    min="0"
+                    max="1"
+                    value="0.85"
+                    step="0.01"
+                  />
+                  <label for="bloomStrength" style="margin-top: 10px"
+                    >Bloom Strength</label
+                  >
+                  <input
+                    type="range"
+                    id="bloomStrength"
+                    name="bloomStrength"
+                    min="0"
+                    max="3"
+                    value="0.4"
+                    step="0.01"
+                  />
+                  <label for="bloomRadius" style="margin-top: 10px"
+                    >Bloom Radius</label
+                  >
+                  <input
+                    type="range"
+                    id="bloomRadius"
+                    name="bloomRadius"
+                    min="0"
+                    max="1"
+                    value="0.2"
+                    step="0.01"
+                  />
+
+                  <h5
+                    style="
+                      margin-top: 20px;
+                      margin-bottom: 5px;
+                      border-top: 1px solid var(--color-border-subtle);
+                      padding-top: 15px;
+                    "
+                  >
+                    Screen Space Ambient Occlusion (SSAO)
+                  </h5>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    <input type="checkbox" id="ssaoToggle" name="ssaoToggle" />
+                    <label
+                      for="ssaoToggle"
+                      style="margin-left: 8px; margin-bottom: 0"
+                      >Enable SSAO</label
+                    >
+                  </div>
+                  <label for="ssaoKernelRadius">Kernel Radius</label>
+                  <input
+                    type="range"
+                    id="ssaoKernelRadius"
+                    name="ssaoKernelRadius"
+                    min="0.01"
+                    max="2"
+                    value="0.5"
+                    step="0.01"
+                  />
+                  <label for="ssaoMinDistance" style="margin-top: 10px"
+                    >Min Distance</label
+                  >
+                  <input
+                    type="range"
+                    id="ssaoMinDistance"
+                    name="ssaoMinDistance"
+                    min="0.0001"
+                    max="0.01"
+                    value="0.001"
+                    step="0.00001"
+                  />
+                  <label for="ssaoMaxDistance" style="margin-top: 10px"
+                    >Max Distance</label
+                  >
+                  <input
+                    type="range"
+                    id="ssaoMaxDistance"
+                    name="ssaoMaxDistance"
+                    min="0.01"
+                    max="0.5"
+                    value="0.1"
+                    step="0.01"
+                  />
+
+                  <h5
+                    style="
+                      margin-top: 20px;
+                      margin-bottom: 5px;
+                      border-top: 1px solid var(--color-border-subtle);
+                      padding-top: 15px;
+                    "
+                  >
+                    Anti-Aliasing (SMAA)
+                  </h5>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      id="smaaToggle"
+                      name="smaaToggle"
+                      checked
+                    />
+                    <label
+                      for="smaaToggle"
+                      style="margin-left: 8px; margin-bottom: 0"
+                      >Enable SMAA</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Accordion Container -->
+
+          <!-- Action Buttons Area (outside accordion) -->
+          <div
+            class="action-buttons-container"
+            style="
+              margin-top: 20px;
+              border-top: 1px solid var(--color-border-subtle);
+              padding-top: 15px;
+            "
+          >
+            <div class="control-group">
+              <button id="newUploadButton" title="Upload a different model">
+                <i class="fas fa-sync-alt"></i> New Upload
+              </button>
+            </div>
+            <div class="control-group">
+              <button id="resetView">Reset View</button>
+            </div>
+            <div class="control-group">
+              <button id="exportPNG">Export as PNG</button>
+            </div>
+          </div>
+        </div>
+        <!-- End Controls Panel -->
+
+        <!-- Info Panel - Initially hidden via CSS opacity -->
+        <div id="info">
+          <button id="info-close-button" aria-label="Close info panel">
+            &#10005;
+          </button>
+          <strong>Controls:</strong><br />
+          • Mouse: Orbit camera<br />
+          • Scroll: Zoom in/out<br />
+          • Right-click + drag: Pan<br />
+          • Use panel controls for customization
+        </div>
+      </div>
+    </div>
+
+    <!-- Three.js Library with ES6 Modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
+      }
+    </script>
+
+    <!-- Main Application Script -->
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
